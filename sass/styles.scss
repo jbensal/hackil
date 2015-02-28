@@ -5,6 +5,7 @@
 @import "mixins";
 @import "base";
 
+<<<<<<< HEAD
 #map{
     width: 80%;
 }
@@ -22,3 +23,50 @@
 
 //MAP CSS
 
+=======
+body {
+	background-image: url($background-subtle);
+	background-attachment: fixed;
+	height: 100%;
+	width: 100%;
+}
+
+#map { 
+	position: absolute; 
+	top: 0; 
+	bottom: 0; 
+	width: 100%; 
+}
+
+.wrapper {
+	padding-top: 10%;
+}
+
+.title {
+	color: rgba(0, 0, 0, 0.8);
+	font-size: 32px;
+	text-align: center;
+}
+
+.login-content {
+	display: block;
+	margin: 0 auto;
+	width: 120px;
+	height: 120px;
+
+	text-align: center;
+	text-decoration: none;
+	font-family: $font-primary;
+	color: rgba(0, 0, 0, 0.66);
+	cursor: pointer;
+}
+.login-content:hover {
+	opacity: 0.75;
+	transition: opacity 1.2s;
+}
+
+#insta-icon {
+	width: 100px;
+	height: 100px;
+}
+>>>>>>> f267d17c61ddc1f2ab89c443e9593dc27b03e8a6
