@@ -4,9 +4,11 @@
 @import "variables";
 @import "mixins";
 @import "base";
-body{
-    visibility: hidden;
+
+#map{
+    width: 80%;
 }
+
 .mapVisualization{
     width: 80%;
 }
@@ -17,3 +19,6 @@ body{
     height: 20%;
     display: inline-block;
 }
+
+//MAP CSS
+
