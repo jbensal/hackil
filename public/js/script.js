@@ -1,1 +1,1 @@
-function highlightThis(){var a=this.style.backgroundColor;this.style.backgroundColor="yellow",alert(this.className),this.style.backgroundColor=a}for(var divs=document.getElementsByTagName("div"),i=0;i<divs.length;i++)divs[i].addEventListener("click",highlightThis);
+function success(a){a.coords.latitude,a.coords.longitude;console.log(a.coords.latitude),console.log(a.coords.longitude)}function error(){console.log("error")}navigator.geolocation.getCurrentPosition(success,error);

@@ -12,6 +12,7 @@ var request = require('request');
 
 app.listen(process.env.PORT || port);
 
+//Instagram Features: 
 
 api.use({ client_id: 'b61282d995b742f1b640cdbd5409ecd7',
          client_secret: '914640947582426aaf675a742b49dec5' });
@@ -45,7 +46,7 @@ exports.test = function(req,res){
 }
 
 function instaSearch(latitude,longitude){
-	api.location_search({ lat: latitude, lng: longitude }, function(err, result, remaining, limit) {
+	api.location_search({ lat: latitude, lng: longitude, distance: 5000}, function(err, result, remaining, limit) {
 	console.log(result[0].id.toString())
 
 	api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
