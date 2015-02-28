@@ -1,72 +1,14 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset=utf-8 />
 <title>Set a maps position with geocoder.</title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
-<style>
-  body { margin:0; padding:0; }
-  #map { position:absolute; top:0; bottom:0; width:100%; }
-</style>
+<link href='styles.css' rel='stylesheet' />
 </head>
 <body>
-<div id='map'></div>
-<script>
-L.mapbox.accessToken = 'pk.eyJ1IjoiYWNodW5nMTMiLCJhIjoiN0hNNFR0OCJ9.p3glDYwMjQyGK71gBQpnYA';
-var geocoder = L.mapbox.geocoder('mapbox.places'),
-    map = L.mapbox.map('map', 'examples.map-h67hf2ic');
-
-geocoder.query('Chester, NJ', showMap);
-
-function showMap(err, data) {
-    // The geocoder can return an area, like a city, or a
-    // point, like an address. Here we handle both cases,
-    // by fitting the map bounds to an area or zooming to a point.
-    if (data.lbounds) {
-        map.fitBounds(data.lbounds);
-    } else if (data.latlng) {
-        map.setView([data.latlng[0], data.latlng[1]], 13);
-    }
-}
-</script>
 </body>
-=======
-<!doctype html>
-<html lang="en">
-	<head>
-	  <meta charset="UTF-8">
-	  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	  <title>HACKIL DREAM TEAM LOGIN PAGE</title>
-	  <link rel="stylesheet" href="css/styles.css">
-	</head>
-	<body>
-		<div class="bg-subtle">
-			<div id="login-wrapper">
-				<form name="login-form" class="login-form" action="" method="post">
-				
-					<div class="header">
-						<h1>HACKIL APP</h1>
-						<span>Come on and slam and welcome to the jam.</span>
-					</div>
-				
-					<div class="content">
-						<input name="username" type="text" class="input username" placeholder="Username" />
-						<input name="password" type="password" class="input password" placeholder="Password" />		
-					</div>
-
-					<div class="footer">
-						<input type="submit" name="submit" value="Login" class="button" />
-						<input type="submit" name="submit" value="Register" class="register" />
-					</div>
-				</form>
-			</div>
-		</div>
-	</body>
 	<script src="lib/jquery-2.1.3.min/index.js"></script>
 	<script src="js/script.js"></script>
 	<script src="http://localhost:35729/livereload.js"></script>
->>>>>>> upstream/master
 </html>
