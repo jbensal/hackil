@@ -1,14 +1,12 @@
 var express = require('express');
 var Factual = require('factual-api');
-=======
+
 var factual = new Factual('', '')
 var app = express();
 var api = require('instagram-node').instagram();
 
-
 app.use(express.static(__dirname + '/public'));
 
-<<<<<<< Updated upstream
 var port = process.env.PORT || 3000;
 var request = require('request');
 
