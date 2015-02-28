@@ -5,9 +5,17 @@ var factual = new Factual('onyxZs8ek9NvAOgX9NrqBtCwGXkZoRcgqnJVPmnN', 'yPIF4i2Ha
 var app = express();
 var api = require('instagram-node').instagram();
 var request = require('request');
+var engines = require('consolidate');
 
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
+
+app.set('views', __dirname + '/views/');
+// app.engine('.html', engines.handlebars);
+// app.set('view engine', 'handlebars');
+
+app.engine('hbs', engines.handlebars);
+app.set('view engine', 'hbs');
 
 app.listen(process.env.PORT || port);
 console.log("Express server running on " + port);
@@ -80,6 +88,19 @@ app.get('/users', exports.getUsers);
 //   console.log(res.view);
 // });
 
+// app.get('map', function(req, res){
+
+
+// });
+
+app.get('/map', function(req, res) {
+  res.render('map', {
+    title: 'Ride the Handlebars',
+    author: {name: 'Lemmy Kilmister', age:67},
+    message: 'It seems that our brave new world is becoming less tolerant, spiritual and educated than it ever was when I was young.'
+  });
+});
+
 app.get('/', function(req, res){
 	console.log('request received on index')
 	res.send('homepage');
@@ -150,7 +171,7 @@ app.get('/search', function(req, res) {
   		console.log(obj["latitude"]);
   		console.log(obj["longitude"]);
   	}
-
+    
   })
   	res.send('done');
 });
