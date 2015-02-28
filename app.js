@@ -9,7 +9,6 @@ app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
 var request = require('request');
 
-
 app.listen(process.env.PORT || port);
 
 //Instagram Features: 
@@ -31,11 +30,6 @@ exports.handleauth = function(req, res) {
     } else {
       console.log('Yay! Access token is ' + result.access_token);
       res.send('You made it!!');
-        request
-  .get('https://api.instagram.com/v1/users/self/feed')
-  .on('response', function(error, response, body) {
-    console.log("body" + body) // 200 
-  })
     }
   });
 };
@@ -50,7 +44,7 @@ function instaSearch(latitude,longitude){
 	console.log(result[0].id.toString())
 
 	api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
-	console.log(result)
+	 console.log(result)
 	});
 
 });
