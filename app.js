@@ -115,6 +115,9 @@ function instaSearch(latitude,longitude,distance1){
  	res.status(200).send(instagramdata);
 }
 
+exports.sendFactualData = function(req, res) {
+  res.status(200).send(factual_data);
+};
 
 //get followers
 exports.getUsers = function(req,res){
@@ -255,12 +258,13 @@ app.get('/data', function(req, res){
 
   res.json({ data: instagram_data });
 });
+
 app.post('/instaSearch', exports.test); //initializes ALL friends search
 app.get('/users', exports.getUsers);
 app.post('/search', exports.searchFunction);
 app.get('/instaFriends', exports.sendFriends); //sends ALL friends search
 app.post('/instaFriendsDist', exports.sendFriendsDist); //sends friends within dist
-
+app.get('/factualData', exports.sendFactualData);
 
 app.get('/map', function(req, res) {
   console.log('this is getting rendered');
