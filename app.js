@@ -85,6 +85,9 @@ function instaTuple(url,name,lat,long,description){
 }
 
 function instaSearch(latitude,longitude,distance1){
+    //Clear cache
+    instagramdata = [];
+    
   api.location_search({ lat: latitude, lng: longitude, distance: distance1}, function(err, result, remaining, limit) {
   	console.log("INSTAGRAM")
   	temp = []
@@ -112,6 +115,9 @@ function instaSearch(latitude,longitude,distance1){
 })
 }
  exports.sendFriends = function(req,res){
+     console.log("INSTAGRAM");
+     console.log(instagramdata)
+     console.log("END");
  	res.status(200).send(instagramdata);
 }
 
@@ -268,10 +274,11 @@ app.get('/factualData', exports.sendFactualData);
 
 app.get('/map', function(req, res) {
   console.log('this is getting rendered');
-  console.log(factual_data);
+  console.log(yelp_data);
 
   res.render('map', {
-    data: factual_data
+    f_data: factual_data,
+    y_data: yelp_data
   });
 });
 
