@@ -11,22 +11,18 @@ var yelp = require("yelp").createClient({
 
 var bodyParser = require('body-parser')
 var app = express();
-
 var api = require('instagram-node').instagram();
 var request = require('request');
 var engines = require('consolidate');
-// var app = express(); // declare twice needeD?
 
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
 app.set('views', __dirname + '/views/');
-// app.engine('.html', engines.handlebars);
-// app.set('view engine', 'handlebars');
 app.engine('hbs', engines.handlebars);
 app.set('view engine', 'hbs');
 app.listen(process.env.PORT || port);
-
 console.log("Express server running on " + port);
+
 //Instagram Features:
 api.use({ client_id: 'b61282d995b742f1b640cdbd5409ecd7',
          client_secret: '914640947582426aaf675a742b49dec5' });
@@ -49,13 +45,16 @@ exports.handleauth = function(req, res) {
 
   });
 };
+
 //test function
 exports.test = function(req,res){
   instaSearch(36.841557383,-76.135525865)
 }
+
 function instaSearch(latitude,longitude){
   api.location_search({ lat: latitude, lng: longitude, distance: 5000}, function(err, result, remaining, limit) {
   console.log(result[0].id.toString())
+
   api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
    console.log(result)
   });
@@ -75,7 +74,7 @@ exports.searchFunction = function(req, res) {
   console.log("Longitude " + longitude)
   var category = req.body.category;
   var location = req.body.location;
-  //locality? country?
+
   // categories
   var cat_array = category;
   console.log(cat_array)
@@ -113,19 +112,14 @@ exports.searchFunction = function(req, res) {
     }
   }
   console.log(category_ids);
+
   //Note that latitude and longitude must have 6 digits.
+  var marker_data = null;
   factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(fact_req, fact_res){
-    // console.log(typeof(res.data));
-    // console.log("length: " + res.data.length);
-    // console.log(res.data[0]);
-    // console.log(typeof(res.data[0]));
-    for (var i = 0; i < fact_res.data.length; i++){
-      var obj = fact_res.data[i];
-      console.log(obj["name"]);
-      console.log(obj["latitude"]);
-      console.log(obj["longitude"]);
-    }
+    marker_data = fact_res.data;
+    console.log(res.data)
   });
+
   location;
   searchTerm = category;
   category = category;
@@ -135,38 +129,29 @@ exports.searchFunction = function(req, res) {
   yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
     console.log(data);
   });
-    res.send('done');
-};
 
-//get followers
-exports.getUsers = function(req,res){
-  api.user_followers("self", function(err, users, pagination, remaining, limit) {
-    console.log(users)
-    console.log(err)
-  });
-}
+  res.render('map', {
+      data: marker_data,
+      categories: category_ids,
+      lat: +latitude,
+      lon: +longitude
+    });
+};
 
 // This is where you would initially send users to authorize 
 app.get('/authorize_user', exports.authorize_user);
 // This is your redirect URI 
 app.get('/search.html/handleauth', exports.handleauth);
 app.post('/instaSearch', exports.test);
-app.get('/users', exports.getUsers);
 app.post('/search', exports.searchFunction);
-// factual.get('/t/places-us', {q:"starbucks", filters:{"$or":[{"locality":{"$eq":"los angeles"}},{"locality":{"$eq":"santa monica"}}]}}, function (error, res) {
-//   console.log(res.data);
-// });
-// factual.get('/t/places-us/schema', function (error, res) {
-//   console.log(res.view);
-// });
-// app.get('map', function(req, res){
-// });
+
 app.get('/map', function(req, res) {
   res.render('map', {
     data: null
   });
 });
+
 app.get('/', function(req, res){
-	console.log('request received on index')
-	res.send('homepage');
+  console.log('request received on index')
+  res.send('homepage');
 });

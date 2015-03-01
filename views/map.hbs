@@ -73,9 +73,17 @@
 
     google.maps.event.addDomListener(window, 'load', initialize);
 
-        </script>
+    </script>
     </head>
-  <body>
-    <div id="map-canvas"></div>
-</body>
+
+    <body>
+      <div id="map-canvas"></div>
+      {{#each data}}
+        <h2 class="hidden-div"> {{ this.latitude }}:{{ this.longitude }}</h2>
+      {{/each}}
+
+      <script>
+        // map code goes here. 
+      </script>
+  </body>
 </html>
