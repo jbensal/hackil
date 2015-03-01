@@ -64,8 +64,6 @@ exports.getUsers = function(req,res){
 	});
 }
 
-
->>>>>>> Stashed changes
 // This is where you would initially send users to authorize 
 app.get('/authorize_user', exports.authorize_user);
 // This is your redirect URI 
