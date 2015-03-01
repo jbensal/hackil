@@ -21,6 +21,15 @@
     "matchdep": "~0.1.2",
     "natural": "latest",
     "request": "2.53.0",
+<<<<<<< HEAD
     "yelp": "latest"
+=======
+    "handlebars": "~3.0.0",
+    "consolidate": "~0.11.0",
+    "body-parser": "latest",
+    "yelp": "latest",
+    "natural":"latest",
+    "serve-favicon": "latest"
+>>>>>>> williamxie11/master
   }
 }
