@@ -26,10 +26,8 @@ function sendPostData(location){
           success: function(msg) {
             finished++
             if(finished==2){
-                console.log("hi")
-                window.location = "http://www.google.com/"
+                window.location = "/map"
             }
-
           },
           error: function(msg){
             console.log(msg);
@@ -48,8 +46,7 @@ function sendPostData(location){
             finished++
             console.log(finished)
             if(finished==2){
-                console.log("hi")
-                window.location = "http://www.google.com/"
+                window.location = "/map"
             }
               console.log(msg)
           },
