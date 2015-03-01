@@ -19,6 +19,7 @@
     "handlebars": "~3.0.0",
     "consolidate": "~0.11.0",
     "body-parser": "latest",
-    "yelp": "latest"
+    "yelp": "latest",
+    "natural":"latest"
   }
 }

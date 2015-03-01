@@ -11,13 +11,12 @@ function setUpAutoComplete(){
       });
       autocomplete.setComponentRestrictions({ 'country': $("#q1").val() });
 } 
-
+var finished = 0;
 function sendPostData(location){
     locationObj
       var locationObj = {"lat": location.k, "long":location.D, "category": ["landmarks"], "location" : $("#q2").val()};
       locationObj = JSON.stringify(locationObj)
       console.log(locationObj)
-
       $.ajax({
           type: "POST",
           url: "/search",
@@ -25,7 +24,15 @@ function sendPostData(location){
           dataType: "json",
           contentType: "application/json",
           success: function(msg) {
-              console.log(msg)
+            finished++
+            if(finished==2){
+                console.log("hi")
+                window.location = "http://www.google.com/"
+            }
+
+          },
+          error: function(msg){
+            console.log(msg);
           }
       });
       var loc = {"lat": location.k, "long":location.D};
@@ -38,6 +45,15 @@ function sendPostData(location){
           dataType: "json",
           contentType: "application/json",
           success: function(msg) {
+            finished++
+            console.log(finished)
+            if(finished==2){
+                console.log("hi")
+                window.location = "http://www.google.com/"
+            }
+              console.log(msg)
+          },
+          error: function(msg){
               console.log(msg)
           }
       });

@@ -1,6 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var Factual = require('factual-api');
+var natural = require('natural'),
+    TfIdf = natural.TfIdf,
+    tfidf = new TfIdf();
+
 var factual = new Factual('onyxZs8ek9NvAOgX9NrqBtCwGXkZoRcgqnJVPmnN', 'yPIF4i2HaITiPy1C9DmHNG4xHSVXAnxlH2GgrFyP')
 var yelp = require("yelp").createClient({
   consumer_key: "qydJIFh5gHAyMj6KlrNmtw", 
@@ -49,6 +53,7 @@ exports.handleauth = function(req, res) {
 //test function
 exports.test = function(req,res){
   instaSearch(36.841557383,-76.135525865)
+	res.end('{"success" : "Updated Successfully", "status" : 200}');
 }
 
 function instaSearch(latitude,longitude){
@@ -130,12 +135,14 @@ exports.searchFunction = function(req, res) {
     console.log(data);
   });
 
-  res.render('map', {
-      data: marker_data,
-      categories: category_ids,
-      lat: +latitude,
-      lon: +longitude
-    });
+  //   res.render('map', {
+//       data: marker_data,
+//       categories: category_ids,
+//       lat: +latitude,
+//       lon: +longitude
+//     });
+
+	res.end('{"success" : "Updated Successfully", "status" : 200}');
 };
 
 // This is where you would initially send users to authorize 
