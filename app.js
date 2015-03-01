@@ -30,6 +30,11 @@ exports.handleauth = function(req, res) {
     } else {
       console.log('Yay! Access token is ' + result.access_token);
       res.send('You made it!!');
+      	api.user_followers("self", function(err, users, pagination, remaining, limit) {
+		console.log(users)
+		console.log(err)
+	});
+
     }
   });
 };
@@ -51,11 +56,22 @@ function instaSearch(latitude,longitude){
 
 }
 
+//get followers
+exports.getUsers = function(req,res){
+	api.user_followers("self", function(err, users, pagination, remaining, limit) {
+		console.log(users)
+		console.log(err)
+	});
+}
+
+
+>>>>>>> Stashed changes
 // This is where you would initially send users to authorize 
 app.get('/authorize_user', exports.authorize_user);
 // This is your redirect URI 
 app.get('/handleauth', exports.handleauth);
 app.get('/instaSearch', exports.test);
+app.get('/users', exports.getUsers);
 
 // factual.get('/t/places-us', {q:"starbucks", filters:{"$or":[{"locality":{"$eq":"los angeles"}},{"locality":{"$eq":"santa monica"}}]}}, function (error, res) {
 //   console.log(res.data);
