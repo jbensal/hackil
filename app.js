@@ -197,7 +197,7 @@ exports.sendFriendsDist = function(req,res){
 	api.location_search({ lat: req.body.latitude, lng: req.body.longitude, distance: req.body.distance}, function(err, result, remaining, limit) {
   	console.log("INSTAGRAM")
   	temp = []
-
+  	var instagramdataDist = [];
   	for( i = 0;i<result.length;i++){
 		temp.push(result[i].id.toString());
   	}
@@ -214,7 +214,10 @@ exports.sendFriendsDist = function(req,res){
 	   		tempName = result[0].user.full_name;
 
 	   		var instagramTuple = new instaTuple(tempUrl,tempName,tempLat,tempLong,tempText);
-	   		instagramdata.push(instagramTuple);
+	   		instagramdataDist.push(instagramTuple);
+	   	}
+	   	if(i = unique.length-1){
+	   		res.status(200).send(instagramdata);
 	   	}
 	});
   	}
