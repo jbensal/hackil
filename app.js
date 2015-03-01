@@ -2,10 +2,19 @@ var express = require('express');
 var Factual = require('factual-api');
 
 var factual = new Factual('onyxZs8ek9NvAOgX9NrqBtCwGXkZoRcgqnJVPmnN', 'yPIF4i2HaITiPy1C9DmHNG4xHSVXAnxlH2GgrFyP')
+var yelp = require("yelp").createClient({
+  consumer_key: "qydJIFh5gHAyMj6KlrNmtw", 
+  consumer_secret: "VV0q8-sVQa8wvxTw_cvkl6YEgJM",
+  token: "Z6QStj-d1SbkdOsuxhi9wyr3WH9C8xPx",
+  token_secret: "v9RYnoJBG6SMcuJFFUjQP5Nm30o"
+});
+
+
 var app = express();
 var api = require('instagram-node').instagram();
 var request = require('request');
 var engines = require('consolidate');
+
 
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
@@ -169,7 +178,15 @@ app.get('/search', function(req, res) {
   		console.log(obj["latitude"]);
   		console.log(obj["longitude"]);
   	}
-    
-  })
+  });
+  location = "Seattle"; // this should be changed to be the user input location!
+  searchTerm = "landmarks";
+  category = "landmarks";
+  latlong = latitude+","+longitude;
+  sortType = 0; // best match
+  numResults = 10;
+  yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
+    console.log(data);
+  });
   	res.send('done');
 });
