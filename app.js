@@ -1,6 +1,5 @@
 var express = require('express');
 var Factual = require('factual-api');
-
 var factual = new Factual('onyxZs8ek9NvAOgX9NrqBtCwGXkZoRcgqnJVPmnN', 'yPIF4i2HaITiPy1C9DmHNG4xHSVXAnxlH2GgrFyP')
 var yelp = require("yelp").createClient({
   consumer_key: "qydJIFh5gHAyMj6KlrNmtw", 
@@ -14,15 +13,12 @@ var app = express();
 var api = require('instagram-node').instagram();
 var request = require('request');
 var engines = require('consolidate');
+var app = express();
 
 
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
-
 app.set('views', __dirname + '/views/');
-// app.engine('.html', engines.handlebars);
-// app.set('view engine', 'handlebars');
-
 app.engine('hbs', engines.handlebars);
 app.set('view engine', 'hbs');
 
@@ -36,7 +32,7 @@ console.log("ig")
 var redirect_uri = 'http://localhost:3000/handleauth';
  
 exports.authorize_user = function(req, res) {
-  res.redirect(api.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
+  redirect(api.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
 };
  
 exports.handleauth = function(req, res) {
@@ -87,24 +83,9 @@ app.get('/handleauth', exports.handleauth);
 app.get('/instaSearch', exports.test);
 app.get('/users', exports.getUsers);
 
-// factual.get('/t/places-us', {q:"starbucks", filters:{"$or":[{"locality":{"$eq":"los angeles"}},{"locality":{"$eq":"santa monica"}}]}}, function (error, res) {
-//   console.log(res.data);
-// });
-
-// factual.get('/t/places-us/schema', function (error, res) {
-//   console.log(res.view);
-// });
-
-// app.get('map', function(req, res){
-
-
-// });
-
 app.get('/map', function(req, res) {
   res.render('map', {
-    title: 'Ride the Handlebars',
-    author: {name: 'Lemmy Kilmister', age:67},
-    message: 'It seems that our brave new world is becoming less tolerant, spiritual and educated than it ever was when I was young.'
+    data: null
   });
 });
 
@@ -123,8 +104,6 @@ app.get('/search', function(req, res) {
   //longitude
   var longitude = req.query.lon
   console.log("Longitude " + longitude)
-  
-  //locality? country?
 
   // categories
   var cat_array = req.query.categories.split(',');
@@ -163,22 +142,8 @@ app.get('/search', function(req, res) {
   	}
   }
 
-  console.log(category_ids);
+  // console.log(category_ids);
 
-  //Note that latitude and longitude must have 6 digits.
-  factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(req, res){
-  	// console.log(typeof(res.data));
-  	// console.log("length: " + res.data.length);
-  	// console.log(res.data[0]);
-  	// console.log(typeof(res.data[0]));
-
-  	for (var i = 0; i < res.data.length; i++){
-  		var obj = res.data[i];
-  		console.log(obj["name"]);
-  		console.log(obj["latitude"]);
-  		console.log(obj["longitude"]);
-  	}
-  });
   location = "Seattle"; // this should be changed to be the user input location!
   searchTerm = "landmarks";
   category = "landmarks";
@@ -189,4 +154,14 @@ app.get('/search', function(req, res) {
     console.log(data);
   });
   	res.send('done');
+
+  var marker_data = null;
+  factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(fact_req, fact_res){
+    marker_data = fact_res.data;
+    
+    res.render('map', {
+      data: marker_data
+    });
+  })
+
 });
