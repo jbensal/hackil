@@ -18,6 +18,7 @@ var app = express();
 var api = require('instagram-node').instagram();
 var request = require('request');
 var engines = require('consolidate');
+var async = require('async');
 
 var instagram_data = null;
 var factual_data = null;
@@ -66,6 +67,7 @@ function instaSearch(latitude,longitude){
 
   api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
    instagram_data = result;
+   console.log('instagram finished');
   });
 })
 }
@@ -120,24 +122,32 @@ exports.searchFunction = function(req, res) {
       category_ids.push(430);
     }
   }
-  console.log(category_ids);
 
-  //Note that latitude and longitude must have 6 digits.
-  factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(fact_req, fact_res){
-    factual_data = fact_res.data;
+  async.parallel({
+    yelp_function: function(callback){
+      location;
+      searchTerm = category;
+      category = category;
+      latlong = latitude+","+longitude;
+      sortType = 0; // best match
+      numResults = 10;
+
+      yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
+        callback(null, data)
+      });
+    },
+    factual_function: function(callback){
+      factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(fact_req, fact_res){
+        callback(null, fact_res.data);
+      });
+    }
+  }, 
+  function(err, results){
+    factual_data = results['factual_function'];
+    yelp_data = results['yelp_function'];
+
+    res.end('{"success" : "Updated Successfully", "status" : 200}');  
   });
-
-  location;
-  searchTerm = category;
-  category = category;
-  latlong = latitude+","+longitude;
-  sortType = 0; // best match
-  numResults = 10;
-  yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
-    yelp_data = data;
-  });
-
-	res.end('{"success" : "Updated Successfully", "status" : 200}');
 };
 
 // This is where you would initially send users to authorize 
@@ -147,18 +157,10 @@ app.get('/search.html/handleauth', exports.handleauth);
 app.post('/instaSearch', exports.test);
 app.post('/search', exports.searchFunction);
 
-app.get('/data', function(req, res){
-  console.log(instagram_data);
-
-  res.json({ data: instagram_data });
-});
-
 app.get('/map', function(req, res) {
-  console.log('this is getting rendered');
-  console.log(instagram_data);
-
   res.render('map', {
-    data: instagram_data
+    yelp: yelp_data,
+    factual: factual_data
   });
 });
 
