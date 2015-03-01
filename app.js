@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var Factual = require('factual-api');
-
 var factual = new Factual('onyxZs8ek9NvAOgX9NrqBtCwGXkZoRcgqnJVPmnN', 'yPIF4i2HaITiPy1C9DmHNG4xHSVXAnxlH2GgrFyP')
 var yelp = require("yelp").createClient({
   consumer_key: "qydJIFh5gHAyMj6KlrNmtw", 
@@ -10,26 +9,42 @@ var yelp = require("yelp").createClient({
   token_secret: "v9RYnoJBG6SMcuJFFUjQP5Nm30o"
 });
 
+<<<<<<< Updated upstream
+=======
+var bodyParser = require('body-parser')
+>>>>>>> Stashed changes
 var app = express();
+
 var api = require('instagram-node').instagram();
 var request = require('request');
 var engines = require('consolidate');
+<<<<<<< Updated upstream
 // var app = express(); // declare twice needeD?
 
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
 app.set('views', __dirname + '/views/');
+=======
+app.use(express.static(__dirname + '/public'));
+var port = process.env.PORT || 3000;
+app.set('views', __dirname + '/views/');
+// app.engine('.html', engines.handlebars);
+// app.set('view engine', 'handlebars');
+>>>>>>> Stashed changes
 app.engine('hbs', engines.handlebars);
 app.set('view engine', 'hbs');
-
 app.listen(process.env.PORT || port);
-console.log("Express server running on " + port);
 
+console.log("Express server running on " + port);
 //Instagram Features:
 api.use({ client_id: 'b61282d995b742f1b640cdbd5409ecd7',
          client_secret: '914640947582426aaf675a742b49dec5' });
+<<<<<<< Updated upstream
+=======
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+
+>>>>>>> Stashed changes
 var redirect_uri = 'http://localhost:3000/handleauth';
- 
 exports.authorize_user = function(req, res) {
   res.redirect(api.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
 };
@@ -42,26 +57,39 @@ exports.handleauth = function(req, res) {
     } else {
       console.log('Yay! Access token is ' + result.access_token);
       res.send('You made it!!');
+<<<<<<< Updated upstream
       api.user_followers("self", function(err, users, pagination, remaining, limit) {
 	      console.log(users);
 	      console.log(err);
       });
+=======
+        api.user_followers("self", function(err, users, pagination, remaining, limit) {
+    console.log(users)
+    console.log(err)
+  });
+>>>>>>> Stashed changes
     }
   });
 };
-
 //test function
 exports.test = function(req,res){
-	instaSearch(36.841557383,-76.135525865)
+  instaSearch(36.841557383,-76.135525865)
 }
-
 function instaSearch(latitude,longitude){
   api.location_search({ lat: latitude, lng: longitude, distance: 5000}, function(err, result, remaining, limit) {
+<<<<<<< Updated upstream
     console.log(result[0].id.toString())
     api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
       console.log(result)
     });
   });
+=======
+  console.log(result[0].id.toString())
+  api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
+   console.log(result)
+  });
+});
+>>>>>>> Stashed changes
 }
 
 //Search route. Uses query parameters to pass in values into the Factual search.
@@ -83,7 +111,11 @@ exports.searchFunction = function(req, res) {
   console.log(cat_array)
   var category_ids = new Array();
   for (var i = 0; i < cat_array.length; i++){
+<<<<<<< Updated upstream
     console.log(cat_array[i])
+=======
+  	console.log(cat_array[i])
+>>>>>>> Stashed changes
     if (cat_array[i] == "auto"){
       category_ids.push(2);
     }
@@ -143,10 +175,10 @@ exports.searchFunction = function(req, res) {
 
 //get followers
 exports.getUsers = function(req,res){
-	api.user_followers("self", function(err, users, pagination, remaining, limit) {
-		console.log(users)
-		console.log(err)
-	});
+  api.user_followers("self", function(err, users, pagination, remaining, limit) {
+    console.log(users)
+    console.log(err)
+  });
 }
 
 // This is where you would initially send users to authorize 
@@ -156,13 +188,19 @@ app.get('/handleauth', exports.handleauth);
 app.get('/instaSearch', exports.test);
 app.get('/users', exports.getUsers);
 app.post('/search', exports.searchFunction);
-
+// factual.get('/t/places-us', {q:"starbucks", filters:{"$or":[{"locality":{"$eq":"los angeles"}},{"locality":{"$eq":"santa monica"}}]}}, function (error, res) {
+//   console.log(res.data);
+// });
+// factual.get('/t/places-us/schema', function (error, res) {
+//   console.log(res.view);
+// });
+// app.get('map', function(req, res){
+// });
 app.get('/map', function(req, res) {
   res.render('map', {
     data: null
   });
 });
-
 app.get('/', function(req, res){
 	console.log('request received on index')
 	res.send('homepage');
