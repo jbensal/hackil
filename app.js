@@ -8,7 +8,6 @@
 //		input: dist, lat long
 //		output: friends within dist of lat long
 
-
 var express = require('express');
 var bodyParser = require('body-parser')
 var Factual = require('factual-api');
@@ -29,6 +28,7 @@ var app = express();
 var api = require('instagram-node').instagram();
 var request = require('request');
 var engines = require('consolidate');
+var async = require('async');
 
 var instagram_data = null;
 var factual_data = null;
@@ -89,7 +89,6 @@ function instaSearch(latitude,longitude,distance1){
   api.location_search({ lat: latitude, lng: longitude, distance: distance1}, function(err, result, remaining, limit) {
   	console.log("INSTAGRAM")
   	temp = []
-
   	for( i = 0;i<result.length;i++){
 		temp.push(result[i].id.toString());
   	}
@@ -166,24 +165,35 @@ exports.searchFunction = function(req, res) {
       category_ids.push(430);
     }
   }
-  console.log(category_ids);
 
-  //Note that latitude and longitude must have 6 digits.
-  factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(fact_req, fact_res){
-    factual_data = fact_res.data;
+  async.parallel({
+    yelp_function: function(callback){
+      location;
+      searchTerm = category;
+      category = category;
+      latlong = latitude+","+longitude;
+      sortType = 0; // best match
+      numResults = 10;
+
+      yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
+        console.log('yelp finished');
+        callback(null, data)
+      });
+    },
+    factual_function: function(callback){
+      factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(fact_req, fact_res){
+        console.log('factual finished');
+        callback(null, fact_res.data);
+      });
+    }
+  }, 
+  function(err, results){
+    factual_data = results['factual_function'];
+    yelp_data = results['yelp_function'];
+
+    console.log('result end');
+    res.end('{"success" : "Updated Successfully", "status" : 200}');  
   });
-
-  location;
-  searchTerm = category;
-  category = category;
-  latlong = latitude+","+longitude;
-  sortType = 0; // best match
-  numResults = 10;
-  yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
-    yelp_data = data;
-  });
-
-	res.end('{"success" : "Updated Successfully", "status" : 200}');
 };
 
 //get followers
@@ -249,23 +259,10 @@ app.post('/search', exports.searchFunction);
 app.get('/instaFriends', exports.sendFriends); //sends ALL friends search
 app.post('/instaFriendsDist', exports.sendFriendsDist); //sends friends within dist
 
-
-
-
-// factual.get('/t/places-us', {q:"starbucks", filters:{"$or":[{"locality":{"$eq":"los angeles"}},{"locality":{"$eq":"santa monica"}}]}}, function (error, res) {
-//   console.log(res.data);
-// });
-// factual.get('/t/places-us/schema', function (error, res) {
-//   console.log(res.view);
-// });
-// app.get('map', function(req, res){
-// });
 app.get('/map', function(req, res) {
-  console.log('this is getting rendered');
-  console.log(instagram_data);
-
   res.render('map', {
-    data: instagram_data
+    yelp: yelp_data,
+    factual: factual_data
   });
 });
 
