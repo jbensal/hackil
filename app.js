@@ -236,7 +236,7 @@ exports.searchFunction = function(req, res) {
 
       yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
         console.log('yelp finished');
-        callback(null, data)
+        callback(null, null)
       });
     },
     factual_function: function(callback){
