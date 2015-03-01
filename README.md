@@ -1,2 +1,0 @@
-# hackil
-DREAM TEAM
