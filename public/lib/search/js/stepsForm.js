@@ -176,7 +176,9 @@
 		}
 		//chris added this
 		$("#cityText").text("Which city in " + $("#q1").val() +" are you going to?");
-
+		if(this.current==1){
+			setUpAutoComplete();
+		}
 	}
 
 	// updates the progress bar by setting its width
