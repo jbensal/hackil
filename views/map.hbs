@@ -175,12 +175,15 @@ a>p{
                         ENROUTE
                     </a>
                 </li>  
-                {{#each data}}
+                {{#each f_data}}
                 <li>
                     <a href="#"><p><span style = "font-weight: bold;">{{this.name }}</span><br />{{ this.region }} <br />{{this.tel}} <br />{{ this.address }}</p></a>
                 </li>
                 {{/each}}
+
+
             </ul>
+            
             <div src = "sampleImg" style = "position: absolute; margin-bottom: 20px;text-decoration: none;">
                     <img src = "http://cache.graphicslib.viator.com/graphicslib/thumbs674x446/2050/SITours/eiffel-tower-paris-moulin-rouge-show-and-seine-river-cruise-in-paris-150305.jpg" style = "width: 100%; height: 150px%; margin-bottom: 10px;">
                     <a style = "padding-left: 10px; color: white;">Eiffel Tower<a/>
