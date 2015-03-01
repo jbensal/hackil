@@ -1,6 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var Factual = require('factual-api');
+var natural = require('natural'),
+    TfIdf = natural.TfIdf,
+    tfidf = new TfIdf();
+
 var factual = new Factual('onyxZs8ek9NvAOgX9NrqBtCwGXkZoRcgqnJVPmnN', 'yPIF4i2HaITiPy1C9DmHNG4xHSVXAnxlH2GgrFyP')
 var yelp = require("yelp").createClient({
   consumer_key: "qydJIFh5gHAyMj6KlrNmtw", 
@@ -52,6 +56,7 @@ exports.handleauth = function(req, res) {
 //test function
 exports.test = function(req,res){
   instaSearch(36.841557383,-76.135525865)
+	res.end('{"success" : "Updated Successfully", "status" : 200}');
 }
 function instaSearch(latitude,longitude){
   api.location_search({ lat: latitude, lng: longitude, distance: 5000}, function(err, result, remaining, limit) {
@@ -135,7 +140,7 @@ exports.searchFunction = function(req, res) {
   yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
     console.log(data);
   });
-    res.send('done');
+	res.end('{"success" : "Updated Successfully", "status" : 200}');
 };
 
 //get followers
