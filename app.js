@@ -19,6 +19,10 @@ var api = require('instagram-node').instagram();
 var request = require('request');
 var engines = require('consolidate');
 
+var instagram_data = null;
+var factual_data = null;
+var yelp_data = null;
+
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
 app.set('views', __dirname + '/views/');
@@ -61,7 +65,7 @@ function instaSearch(latitude,longitude){
   console.log(result[0].id.toString())
 
   api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
-   console.log(result)
+   instagram_data = result;
   });
 })
 }
@@ -119,10 +123,8 @@ exports.searchFunction = function(req, res) {
   console.log(category_ids);
 
   //Note that latitude and longitude must have 6 digits.
-  var marker_data = null;
   factual.get('/t/places-us', {filters:{category_ids:{"$includes_any":category_ids}}, geo:{"$circle":{"$center":[+latitude, +longitude],"$meters":1000}}}, function(fact_req, fact_res){
-    marker_data = fact_res.data;
-    console.log(res.data)
+    factual_data = fact_res.data;
   });
 
   location;
@@ -132,15 +134,8 @@ exports.searchFunction = function(req, res) {
   sortType = 0; // best match
   numResults = 10;
   yelp.search({location: location, category_filter: category, cll: latlong, sort: sortType, limit: numResults}, function(error, data) {
-    console.log(data);
+    yelp_data = data;
   });
-
-  //   res.render('map', {
-//       data: marker_data,
-//       categories: category_ids,
-//       lat: +latitude,
-//       lon: +longitude
-//     });
 
 	res.end('{"success" : "Updated Successfully", "status" : 200}');
 };
@@ -152,9 +147,18 @@ app.get('/search.html/handleauth', exports.handleauth);
 app.post('/instaSearch', exports.test);
 app.post('/search', exports.searchFunction);
 
+app.get('/data', function(req, res){
+  console.log(instagram_data);
+
+  res.json({ data: instagram_data });
+});
+
 app.get('/map', function(req, res) {
+  console.log('this is getting rendered');
+  console.log(instagram_data);
+
   res.render('map', {
-    data: null
+    data: instagram_data
   });
 });
 
