@@ -20,9 +20,6 @@ var engines = require('consolidate');
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
 app.set('views', __dirname + '/views/');
-app.use(express.static(__dirname + '/public'));
-var port = process.env.PORT || 3000;
-app.set('views', __dirname + '/views/');
 // app.engine('.html', engines.handlebars);
 // app.set('view engine', 'handlebars');
 app.engine('hbs', engines.handlebars);
@@ -35,7 +32,7 @@ api.use({ client_id: 'b61282d995b742f1b640cdbd5409ecd7',
          client_secret: '914640947582426aaf675a742b49dec5' });
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
-var redirect_uri = 'http://localhost:3000/handleauth';
+var redirect_uri = 'http://localhost:3000/search.html/handleauth';
 exports.authorize_user = function(req, res) {
   res.redirect(api.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
 };
@@ -47,16 +44,9 @@ exports.handleauth = function(req, res) {
       res.send(err);
     } else {
       console.log('Yay! Access token is ' + result.access_token);
-      res.send('You made it!!');
-      api.user_followers("self", function(err, users, pagination, remaining, limit) {
-	      console.log(users);
-	      console.log(err);
-      });
-      api.user_followers("self", function(err, users, pagination, remaining, limit) {
-        console.log(users)
-        console.log(err)
-      });
+      res.redirect("http://localhost:3000/search.html")
     }
+
   });
 };
 //test function
@@ -65,15 +55,11 @@ exports.test = function(req,res){
 }
 function instaSearch(latitude,longitude){
   api.location_search({ lat: latitude, lng: longitude, distance: 5000}, function(err, result, remaining, limit) {
-    console.log(result[0].id.toString())
-    api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
-      console.log(result)
-    });
-  });
   console.log(result[0].id.toString())
   api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
    console.log(result)
   });
+})
 }
 
 //Search route. Uses query parameters to pass in values into the Factual search.
@@ -95,8 +81,6 @@ exports.searchFunction = function(req, res) {
   console.log(cat_array)
   var category_ids = new Array();
   for (var i = 0; i < cat_array.length; i++){
-    console.log(cat_array[i])
-  	console.log(cat_array[i])
     if (cat_array[i] == "auto"){
       category_ids.push(2);
     }
@@ -165,8 +149,8 @@ exports.getUsers = function(req,res){
 // This is where you would initially send users to authorize 
 app.get('/authorize_user', exports.authorize_user);
 // This is your redirect URI 
-app.get('/handleauth', exports.handleauth);
-app.get('/instaSearch', exports.test);
+app.get('/search.html/handleauth', exports.handleauth);
+app.post('/instaSearch', exports.test);
 app.get('/users', exports.getUsers);
 app.post('/search', exports.searchFunction);
 // factual.get('/t/places-us', {q:"starbucks", filters:{"$or":[{"locality":{"$eq":"los angeles"}},{"locality":{"$eq":"santa monica"}}]}}, function (error, res) {
