@@ -74,7 +74,6 @@ function instaSearch(latitude,longitude){
   api.location_media_recent(result[0].id.toString(), function(err, result, pagination, remaining, limit) {
    console.log(result)
   });
-});
 }
 
 //Search route. Uses query parameters to pass in values into the Factual search.
