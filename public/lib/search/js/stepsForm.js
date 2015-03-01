@@ -176,7 +176,9 @@
 		}
 		//chris added this
 		$("#cityText").text("Which city in " + $("#q1").val() +" are you going to?");
-
+		if(this.current==1){
+			setUpAutoComplete();
+		}
 	}
 
 	// updates the progress bar by setting its width
@@ -195,16 +197,26 @@
 	}
 
 	// submits the form
+	var failFlag = false;
 	stepsForm.prototype._submit = function() {
-		this.options.onSubmit( this.el );
+		if(autocomplete.getPlace()!=undefined){
+			failFlag = false;
+			console.log(autocomplete.getPlace())
+		  	google.maps.event.addListener(autocomplete, 'place_changed', sendPostData(autocomplete.getPlace().geometry.location));
+		}
+		else
+			failFlag = true;
 	}
 
 	// TODO (next version..)
 	// the validation function
 	stepsForm.prototype._validade = function() {
 		// current question´s input
+		//HACKY FIX
+		if(this.current==2)
+			this.current = 1;
 		var input = this.questions[ this.current ].querySelector( 'input' ).value;
-		if( input === '' ) {
+		if( failFlag ) {
 			this._showError( 'EMPTYSTR' );
 			return false;
 		}

@@ -20,10 +20,6 @@
 								<span><label for="q2" id = "cityText">What city in </label></span>
 								<input id="q2" name="q2" type="text"/>
 							</li>
-							<li>
-								<span><label for="q3">What are you interested in doing?</label></span>
-								<input id="q3" name="q3" type="text"/>
-							</li>
 						</ol><!-- /questions -->
 						<button class="submit" type="submit">Send answers</button>
 						<div class="controls">
@@ -41,10 +37,12 @@
 			</section>
 		</div>
 		</body>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+		<script src='https://code.jquery.com/jquery-2.1.3.min.js'></script>	
+		<script src='lib/search/js/search.js'></script>
 		<script src='lib/search/js/classie.js'></script>
 		<script src='lib/search/js/modernizr.custom.js'></script>
 		<script src='lib/search/js/stepsForm.js'></script>
-		<script src='lib/jquery-2.1.3.min/index.js'></script>
 		<script>
 			var theForm = document.getElementById( 'theForm' );
 			new stepsForm( theForm, {
@@ -64,5 +62,6 @@
 				}
 			} );
 		</script>
+
 	</html>
 
