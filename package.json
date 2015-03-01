@@ -21,6 +21,7 @@
     "yelp": "latest",
     "body-parser": "latest",
     "yelp": "latest",
-    "natural":"latest"
+    "natural":"latest",
+    "serve-favicon": "latest"
   }
 }
